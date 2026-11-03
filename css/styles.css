@@ -1,0 +1,368 @@
+/* ==========================================================================
+   Base
+   ========================================================================== */
+:root {
+  --accent-a: #6366f1;
+  --accent-b: #a855f7;
+}
+
+/* Theme tokens as "R G B" triplets (used by Tailwind via rgb(var(--x) / alpha)).
+   Dark is the default; light inverts the neutral scale. */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: 7 7 10;            /* page background */
+  --white: 255 255 255;     /* strongest foreground, also used for glass tints */
+  --zinc-50: 250 250 250;
+  --zinc-100: 244 244 245;
+  --zinc-200: 228 228 231;
+  --zinc-300: 212 212 216;
+  --zinc-400: 161 161 170;
+  --zinc-500: 113 113 122;
+  --zinc-600: 82 82 91;
+  --zinc-700: 63 63 70;
+  --zinc-800: 39 39 42;
+  --zinc-900: 24 24 27;
+  --zinc-950: 9 9 11;
+  --shadow: 0 0 0;
+  --grid-alpha: 0.025;
+  --scrim-alpha: 0.78;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ink: 250 250 252;
+  --white: 9 9 11;
+  --zinc-50: 9 9 11;
+  --zinc-100: 24 24 27;
+  --zinc-200: 39 39 42;
+  --zinc-300: 63 63 70;
+  --zinc-400: 82 82 91;
+  --zinc-500: 107 107 116;
+  --zinc-600: 161 161 170;
+  --zinc-700: 212 212 216;
+  --zinc-800: 228 228 231;
+  --zinc-900: 244 244 245;
+  --zinc-950: 250 250 250;
+  --shadow: 24 24 40;
+  --grid-alpha: 0.05;
+  --scrim-alpha: 0.85;
+}
+
+body { transition: background-color 0.3s, color 0.3s; }
+
+html { scroll-padding-top: 5rem; }
+/* clip (not hidden) so wide decorations can't widen the page on mobile browsers */
+html, body { overflow-x: clip; }
+
+:focus-visible {
+  outline: 2px solid var(--accent-a);
+  outline-offset: 3px;
+  border-radius: 0.5rem;
+}
+.btn-primary:focus-visible,
+.btn-ghost:focus-visible { border-radius: 9999px; }
+
+/* Dark halo behind hero copy so it stays readable over the particle orb */
+.hero-scrim {
+  position: absolute;
+  inset: -4rem -2rem;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse 60% 55% at 50% 45%, rgb(var(--ink) / var(--scrim-alpha)), rgb(var(--ink) / 0.35) 55%, transparent 75%);
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgb(var(--white) / var(--grid-alpha)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--white) / var(--grid-alpha)) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at top, black 20%, transparent 70%);
+}
+
+/* ==========================================================================
+   Navbar
+   ========================================================================== */
+/* Reading progress line under the navbar */
+.scroll-progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 100%;
+  transform-origin: left;
+  transform: scaleX(var(--progress, 0));
+  background: linear-gradient(90deg, var(--accent-a), var(--accent-b));
+}
+
+#navbar.is-scrolled {
+  background: rgb(var(--ink) / 0.75);
+  border-bottom: 1px solid rgb(var(--white) / 0.06);
+  backdrop-filter: blur(14px);
+}
+
+.nav-link {
+  display: block;
+  padding: 0.45rem 1rem;
+  border-radius: 9999px;
+  transition: color 0.2s, background 0.2s;
+}
+.nav-link:hover { color: rgb(var(--white)); }
+.nav-link.is-active { color: rgb(var(--white)); background: rgb(var(--white) / 0.08); }
+
+.logo-badge {
+  display: flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.65rem;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  box-shadow: 0 0 24px rgba(99, 102, 241, 0.45);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn-primary,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.7rem 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.btn-primary {
+  color: rgb(var(--ink));
+  background: rgb(var(--white));
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px -10px rgb(var(--white) / 0.5);
+}
+.btn-ghost {
+  color: rgb(var(--zinc-200));
+  border: 1px solid rgb(var(--white) / 0.14);
+  background: rgb(var(--white) / 0.03);
+  backdrop-filter: blur(8px);
+}
+.btn-ghost:hover { background: rgb(var(--white) / 0.08); }
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+.text-gradient {
+  background: linear-gradient(120deg, var(--accent-a), var(--accent-b), var(--accent-a));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 6s linear infinite;
+}
+
+.text-gradient-static {
+  background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgb(var(--white) / 0.1);
+  background: rgb(var(--white) / 0.04);
+  padding: 0.3rem 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgb(var(--zinc-400));
+  backdrop-filter: blur(8px);
+}
+
+/* ==========================================================================
+   Cards (glass + mouse-follow spotlight)
+   ========================================================================== */
+.card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid rgb(var(--white) / 0.08);
+  background: rgb(var(--white) / 0.025);
+  backdrop-filter: blur(12px);
+  transition: border-color 0.3s, transform 0.3s;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  background: radial-gradient(400px circle at var(--x, 50%) var(--y, 50%), rgb(var(--white) / 0.07), transparent 40%);
+}
+.card:hover { border-color: rgb(var(--white) / 0.16); }
+.card:hover::before { opacity: 1; }
+.card-lift:hover { transform: translateY(-4px); }
+
+.icon-tile {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  width: 3rem;
+  border-radius: 0.75rem;
+  font-size: 1.5rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.app-icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 12px 30px -10px var(--glow, rgba(99, 102, 241, 0.6));
+}
+
+/* Steps joined by a faint line on wide screens */
+.process-line {
+  position: absolute;
+  top: 3.5rem;
+  left: 16%;
+  right: 16%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(var(--white) / 0.15), transparent);
+}
+
+/* Small tilted phone used as a preview on the app cards */
+.mini-phone {
+  position: absolute;
+  right: -1.5rem;
+  bottom: -5rem;
+  width: 9.5rem;
+  aspect-ratio: 9 / 19;
+  border-radius: 1.6rem;
+  border: 5px solid #1c1c22;
+  overflow: hidden;
+  transform: rotate(-8deg);
+  box-shadow: 0 30px 60px -20px rgb(var(--shadow) / 0.5);
+  transition: transform 0.4s cubic-bezier(.2, .7, .2, 1);
+}
+.group:hover .mini-phone { transform: rotate(-4deg) translateY(-10px); }
+
+/* Fade the edges of horizontal scrollers */
+.fade-x { mask-image: linear-gradient(90deg, transparent, black 4%, black 96%, transparent); }
+
+/* ==========================================================================
+   Phone mockup
+   ========================================================================== */
+.phone {
+  position: relative;
+  aspect-ratio: 9 / 19;
+  flex-shrink: 0;
+  border-radius: 2.4rem;
+  border: 7px solid #1c1c22;
+  background: #111;
+  box-shadow: 0 0 0 1px rgb(var(--white) / 0.08), 0 40px 80px -20px rgb(var(--shadow) / 0.5);
+}
+.phone::after {
+  content: "";
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  z-index: 2;
+  height: 1.1rem;
+  width: 4.5rem;
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  background: #1c1c22;
+}
+.phone > * { border-radius: 1.9rem; }
+.float { animation: float 6s ease-in-out infinite; }
+
+/* ==========================================================================
+   FAQ
+   ========================================================================== */
+details > summary { list-style: none; cursor: pointer; }
+details > summary::-webkit-details-marker { display: none; }
+details .chev { transition: transform 0.25s; }
+details[open] .chev { transform: rotate(45deg); }
+
+/* ==========================================================================
+   Privacy policy
+   ========================================================================== */
+.toc-mobile summary { list-style: none; }
+.toc-mobile summary::-webkit-details-marker { display: none; }
+
+.policy h2 { font-family: "Space Grotesk", sans-serif; font-size: 1.2rem; font-weight: 600; color: rgb(var(--zinc-100)); margin: 2.5rem 0 0.85rem; scroll-margin-top: 6rem; }
+.policy p { color: rgb(var(--zinc-400)); line-height: 1.8; margin-bottom: 1rem; }
+.policy ul { list-style: disc; padding-left: 1.25rem; color: rgb(var(--zinc-400)); margin-bottom: 1rem; }
+.policy li { margin-bottom: 0.45rem; line-height: 1.7; }
+.policy a { color: var(--accent-a); text-decoration: underline; text-underline-offset: 3px; }
+.policy strong { color: rgb(var(--zinc-200)); font-weight: 600; }
+
+.toc-link { display: block; border-left: 2px solid transparent; padding: 0.3rem 0 0.3rem 0.9rem; color: rgb(var(--zinc-500)); transition: color 0.2s, border-color 0.2s; }
+.toc-link:hover { color: rgb(var(--zinc-200)); }
+.toc-link.is-active { color: rgb(var(--white)); border-color: var(--accent-a); }
+
+/* ==========================================================================
+   Utilities & animation
+   ========================================================================== */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s cubic-bezier(.2, .7, .2, 1), transform 0.8s cubic-bezier(.2, .7, .2, 1); transition-delay: var(--delay, 0ms); }
+.reveal.is-visible { opacity: 1; transform: none; }
+
+.page-enter { animation: pageIn 0.5s cubic-bezier(.2, .7, .2, 1); }
+
+.scroll-cue { animation: bob 2s ease-in-out infinite; }
+
+@keyframes shine { to { background-position: 200% center; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes bob { 0%, 100% { transform: translateY(0); opacity: 0.6; } 50% { transform: translateY(6px); opacity: 1; } }
+@keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* ==========================================================================
+   Theme toggle
+   ========================================================================== */
+.theme-toggle {
+  display: inline-flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgb(var(--white) / 0.12);
+  background: rgb(var(--white) / 0.03);
+  color: rgb(var(--zinc-300));
+  backdrop-filter: blur(8px);
+  transition: color 0.2s, background 0.2s;
+}
+.theme-toggle:hover { color: rgb(var(--white)); background: rgb(var(--white) / 0.08); }
+.theme-toggle .icon-sun { display: none; }
+:root[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+/* Light mode: cards need a soft shadow since glass on white is nearly invisible */
+:root[data-theme="light"] .card {
+  background: rgb(255 255 255 / 0.7);
+  box-shadow: 0 1px 2px rgb(var(--shadow) / 0.04), 0 8px 24px -12px rgb(var(--shadow) / 0.12);
+}
+:root[data-theme="light"] .bg-grid { mask-image: radial-gradient(ellipse at top, black 10%, transparent 60%); }
